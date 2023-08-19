@@ -12,3 +12,10 @@ should be possible in the future.
 **Project Status:** As long as this readme does not explicitly state any compatibility promises,
 please don't expect any support activity. As of now consider this project is an experiment. Still,
 contributions and feedback are welcome.
+
+## Contributing
+
+### Testing
+
+Currently, tests require a running redis instance available via `127.0.0.1:6379`. These tests modify
+data withing the database so be sure to not accidentally use the wrong database.
