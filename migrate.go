@@ -51,6 +51,14 @@ func (migrator *RedisMigrator) Migrate(ctx context.Context) error {
 
 	// execute migrations one after another. skips already applied migrations
 	for _, migration := range migrator.migrations {
+		// check if migrations should be cancelled
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("migrations cancelled")
+		default:
+			// continue with next migration
+		}
+
 		id := migration.ID
 
 		if applied, err := red.SIsMember(ctx, migrator.migrationLogKey, id).Result(); err != nil {
