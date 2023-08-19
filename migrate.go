@@ -17,6 +17,7 @@ func NewRedisMigration(ID string, up RedisUpFunc) *RedisMigration {
 	return &RedisMigration{ID: ID, Up: up}
 }
 
+// RedisMigrator runs migrations (RedisMigration) for a given redis.Client.
 type RedisMigrator struct {
 	client          *redis.Client
 	migrations      []*RedisMigration
