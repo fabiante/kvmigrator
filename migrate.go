@@ -61,7 +61,11 @@ func (migrator *RedisMigrator) Migrate(ctx context.Context) error {
 
 		id := migration.ID
 
-		if applied, err := red.SIsMember(ctx, migrator.migrationLogKey, id).Result(); err != nil {
+		// migrations should not be cancelled mid-process. therefore a child context
+		// without cancellation is passed.
+		migrationCtx := context.WithoutCancel(ctx)
+
+		if applied, err := red.SIsMember(migrationCtx, migrator.migrationLogKey, id).Result(); err != nil {
 			return fmt.Errorf("checking migration log for migration %s failed: %w", id, err)
 		} else if applied {
 			// skip already applied migration
@@ -69,12 +73,12 @@ func (migrator *RedisMigrator) Migrate(ctx context.Context) error {
 		}
 
 		// apply
-		if err := migrator.apply(ctx, migration); err != nil {
+		if err := migrator.apply(migrationCtx, migration); err != nil {
 			return fmt.Errorf("applying migration %s failed: %w", id, err)
 		}
 
 		// add to migration log
-		if err := red.SAdd(ctx, migrator.migrationLogKey, id).Err(); err != nil {
+		if err := red.SAdd(migrationCtx, migrator.migrationLogKey, id).Err(); err != nil {
 			return fmt.Errorf("migration %s applied, but adding to migration log failed: %w", id, err)
 		}
 	}
