@@ -24,13 +24,13 @@ type RedisMigrator struct {
 	migrationLogKey string
 }
 
-func NewRedisMigrator(client *redis.Client) *RedisMigrator {
+func NewRedisMigrator(client *redis.Client, prefix string) *RedisMigrator {
 	migrator := &RedisMigrator{
 		client:     client,
 		migrations: make([]*RedisMigration, 0),
 	}
 
-	migrator.SetKeyPrefix("redis-migrator:")
+	migrator.SetKeyPrefix(prefix)
 
 	return migrator
 }
