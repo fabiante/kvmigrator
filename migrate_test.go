@@ -3,10 +3,11 @@ package kvmigrator
 import (
 	"context"
 	"fmt"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestMigrate(t *testing.T) {
@@ -15,7 +16,7 @@ func TestMigrate(t *testing.T) {
 	red := redis.NewClient(&redis.Options{Addr: "127.0.0.1:6379"})
 	require.NoError(t, red.Info(ctx).Err())
 
-	migrator := NewRedisMigrator(red)
+	migrator := NewRedisMigrator(red, "test")
 	migrator.SetKeyPrefix("app:migrations:")
 	migrator.AddMigrations(buildMigrations()...)
 	require.NotNil(t, migrator)
