@@ -24,6 +24,9 @@ type RedisMigrator struct {
 	migrationLogKey string
 }
 
+// NewRedisMigrator creates a new migrator using the given client.
+//
+// The given prefix is used for internal keys which the migrator maintains to manage migrations.
 func NewRedisMigrator(client *redis.Client, prefix string) *RedisMigrator {
 	migrator := &RedisMigrator{
 		client:     client,
