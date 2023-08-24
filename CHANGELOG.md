@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add migration sort helper (#7)
+
 ## v0.2.0
 
 - Add key prefix as mandatory parameter (#5)

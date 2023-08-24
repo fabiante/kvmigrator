@@ -8,8 +8,18 @@ import (
 
 type RedisUpFunc = func(ctx context.Context, client *redis.Client) error
 
+// RedisMigration is a single migration to be run on a database.
 type RedisMigration struct {
+	// ID is the identifier of this migration. It is used by the
+	// framework to keep track of pending and finished migrations.
+	//
+	// It is recommended that you use something like "00000001-init" and
+	// "00000002-next-migration" as identifier since this format allows you
+	// to both sort your migrations based on the ID (see SortMigrationsByID) and
+	// generally identify what your migration does.
 	ID string
+
+	// Up is the function implementing the actual migration logic.
 	Up RedisUpFunc
 }
 
